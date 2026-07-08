@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+/* knobtastic:tokens:start — this block is rewritten by Knobtastic Commit */
+:root {
+  --primary-h: 258;
+  --radius-n: 10;
+  --space-n: 0.25;
+  --fs-n: 16;
+}
+/* knobtastic:tokens:end */
+
+/* Register tokens as typed numbers so the 128-step MIDI quantization can be
+   transitioned into smooth, analog-feeling motion. */
+@property --primary-h {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 258;
+}
+@property --radius-n {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 10;
+}
+@property --space-n {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0.25;
+}
+@property --fs-n {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 16;
+}
+
+:root {
+  /* Derived, united tokens — the unitless block above is the single source. */
+  --primary: hsl(var(--primary-h) 82% 54%);
+  --primary-deep: hsl(var(--primary-h) 72% 40%);
+  --primary-soft: hsl(var(--primary-h) 82% 54% / 0.14);
+  --radius: calc(var(--radius-n) * 1px);
+
+  /* Faceplate palette — anodized aluminum, silk-screen ink. */
+  --panel: hsl(40 9% 91%);
+  --panel-raised: hsl(40 14% 97%);
+  --ink: hsl(240 10% 12%);
+  --ink-soft: hsl(240 5% 42%);
+  --line: hsl(40 7% 80%);
+
+  transition:
+    --primary-h 80ms linear,
+    --radius-n 80ms linear,
+    --space-n 80ms linear,
+    --fs-n 80ms linear;
+}
+
+html {
+  font-size: calc(var(--fs-n) * 1px);
+}
+
+@theme inline {
+  --color-panel: var(--panel);
+  --color-panel-raised: var(--panel-raised);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-primary: var(--primary);
+  --color-primary-deep: var(--primary-deep);
+  --color-primary-soft: var(--primary-soft);
+
+  --radius-md: calc(var(--radius) * 0.6);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.8);
+
+  /* Tailwind's spacing base: every p-*, m-*, gap-* breathes with one knob. */
+  --spacing: calc(var(--space-n) * 1rem);
+
+  --font-sans: var(--font-archivo);
+  --font-mono: var(--font-plex-mono);
+}
+
+body {
+  background: var(--panel);
+  color: var(--ink);
+  font-family: var(--font-archivo), sans-serif;
+}
+
+::selection {
+  background: var(--primary);
+  color: white;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ---- Faceplate knob illustration ------------------------------------- */
+/* Each .knob receives --v (a live token), --min and --max via inline style.
+   The pointer angle is pure CSS, so the on-page knob mirrors the physical
+   controller with no JS in the page. Sweep: 270°, from -135° to +135°. */
+
+.knob {
+  position: relative;
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, hsl(40 16% 99%), hsl(40 8% 86%) 72%);
+  box-shadow:
+    0 1px 2px hsl(240 10% 12% / 0.25),
+    0 6px 14px hsl(240 10% 12% / 0.12),
+    inset 0 -2px 4px hsl(240 10% 12% / 0.08);
+}
+
+.knob::before {
+  /* pointer */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(
+    to bottom,
+    var(--primary) 0 30%,
+    transparent 30%
+  );
+  clip-path: inset(6% 47% 50% 47% round 2px);
+  transform: rotate(
+    calc(
+      (
+          (var(--v, 0) - var(--min, 0)) / (var(--max, 1) - var(--min, 0)) * 270 -
+            135
+        ) * 1deg
+    )
+  );
+}
+
+.knob::after {
+  /* center cap */
+  content: "";
+  position: absolute;
+  inset: 38%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, hsl(40 10% 94%), hsl(40 6% 78%));
+  box-shadow: inset 0 1px 2px hsl(0 0% 100% / 0.8), 0 1px 2px hsl(240 10% 12% / 0.2);
+}
+
+/* Live numeric readout rendered by CSS counters — no JS re-render needed.
+   --scale multiplies for display (e.g. 100 for the spacing token). */
+.readout::after {
+  counter-reset: v calc(var(--v, 0) * var(--scale, 1));
+  content: counter(v);
+}
+
+/* MIDI status LED — KnobsPanel sets data-midi="on" on <html>. */
+.led {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: hsl(40 6% 74%);
+  box-shadow: inset 0 1px 1px hsl(240 10% 12% / 0.25);
+  transition: background 200ms, box-shadow 200ms;
+}
+
+[data-midi="on"] .led {
+  background: hsl(130 90% 45%);
+  box-shadow:
+    0 0 6px hsl(130 90% 45% / 0.9),
+    0 0 14px hsl(130 90% 45% / 0.5);
+}
+
+/* ---- Page-load choreography ------------------------------------------ */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: rise-in 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--rise-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    transition: none;
+  }
+  .rise {
+    animation: none;
+  }
+}

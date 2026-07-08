@@ -1,0 +1,50 @@
+/* Knobtastic token block — paste near the top of the project's global CSS
+   (after @import "tailwindcss" for Tailwind v4). Adapt the variables to the
+   tokens you chose for this project; keep the marker comments exactly as
+   they are — Commit rewrites only what sits between them. */
+
+/* knobtastic:tokens:start — this block is rewritten by Knobtastic Commit */
+:root {
+  --primary-h: 258;
+  --radius-n: 10;
+  --space-n: 0.25;
+  --fs-n: 16;
+}
+/* knobtastic:tokens:end */
+
+/* Register tokens as typed numbers so the quantized MIDI steps can be
+   transitioned into smooth, analog-feeling motion. One @property per token. */
+@property --primary-h {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 258;
+}
+
+:root {
+  /* Derive the united values the page actually consumes. The unitless
+     block above stays the single source of truth. */
+  --primary: hsl(var(--primary-h) 82% 54%);
+  --radius: calc(var(--radius-n) * 1px);
+
+  /* Smooth knob turns (80ms per token; list every token). */
+  transition: --primary-h 80ms linear;
+}
+
+html {
+  /* Root font size knob: every rem-based size scales with it. */
+  font-size: calc(var(--fs-n) * 1px);
+}
+
+/* Tailwind v4: map derived tokens into utilities. `--spacing` makes every
+   p-*, m-*, gap-* utility breathe with one knob. */
+@theme inline {
+  --color-primary: var(--primary);
+  --radius-lg: var(--radius);
+  --spacing: calc(var(--space-n) * 1rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    transition: none;
+  }
+}
