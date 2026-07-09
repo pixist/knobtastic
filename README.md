@@ -16,7 +16,7 @@ Twist a knob, the page restyles live with zero recompile — hit **Commit** and 
 [![Tailwind v4](https://img.shields.io/badge/Tailwind-v4-38BDF8?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 ![Web MIDI](https://img.shields.io/badge/Web_MIDI-native-8B5CF6?style=flat-square)
 
-[Install](#install) · [Run the demo](#run-the-demo) · [How it works](#how-it-works) · [Config](#config) · [Controllers](#controllers) · [Claude skill](#claude-skill)
+**[▶ Live demo](https://knobtastic.vercel.app)** · [Install](#install) · [Run the demo](#run-the-demo) · [How it works](#how-it-works) · [Config](#config) · [Controllers](#controllers) · [Claude skill](#claude-skill)
 
 </div>
 
@@ -27,7 +27,7 @@ Picking colors, radii, and spacing by editing numbers, saving, and squinting at 
 <div align="center">
 <img src="docs/media/demo.gif" alt="Twisting a hardware knob on an Ableton Push and watching the page hue, radius and type scale change live" width="90%" />
 
-*Real hardware, real page, zero recompile — [watch the full demo (mp4)](docs/media/demo.mp4).*
+*Real hardware, real page, zero recompile — [try it live](https://knobtastic.vercel.app) or [watch the full demo (mp4)](docs/media/demo.mp4).*
 </div>
 
 ### The hero interaction
