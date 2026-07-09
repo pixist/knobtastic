@@ -25,7 +25,9 @@ Twist a knob, the page restyles live with zero recompile — hit **Commit** and 
 Picking colors, radii, and spacing by editing numbers, saving, and squinting at the reload is a slow feedback loop. Knobtastic closes it: your design tokens become knobs on the hardware already on your desk. You tune with your hands while watching the real page, and only the final values ever touch source.
 
 <div align="center">
-<img src="docs/media/screenshot.png" alt="Knobtastic panel driving the demo page live" width="90%" />
+<img src="docs/media/demo.gif" alt="Twisting a hardware knob on an Ableton Push and watching the page hue, radius and type scale change live" width="90%" />
+
+*Real hardware, real page, zero recompile — [watch the full demo (mp4)](docs/media/demo.mp4).*
 </div>
 
 ### The hero interaction
@@ -69,6 +71,10 @@ Two phases, kept strictly separate.
 | **Commit** | One click POSTs the current values to a dev-only route that rewrites the token block in `globals.css`; the panel clears its overrides and detaches. | Yes — exactly once, one clean diff. |
 
 The Leva panel drives the exact same code path as the hardware, so you can tune with on-screen sliders alone if no controller is plugged in.
+
+<div align="center">
+<img src="docs/media/screenshot.png" alt="Knobtastic panel driving the demo page live" width="90%" />
+</div>
 
 ## Config
 
